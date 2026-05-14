@@ -118,8 +118,10 @@ body.light-mode {
 
 .detail-poster {
   width: 250px;
-  min-width: 200px;
+  min-width: 250px;
   border-radius: 8px;
+  height: 375px;
+  object-fit: cover;
 }
 
 .detail-info {

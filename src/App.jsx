@@ -96,7 +96,7 @@ export default function App(){
           ))}
         </div>
         <p className='detail-description'>{selectedMovie.description}</p>
-        <p className='detail-rating'> Rating: {selectedMovie.rating}/10</p>
+        <p className='detail-rating'> {selectedMovie.rating}/10</p>
       </div>
     </div>
 )}

@@ -1,3 +1,8 @@
+@keyframes fadeIn {
+  from{opacity: 0; transform: translateY(10px);}
+  to{ opacity: 1; transform: translateY(0);}
+}
+
 .card-container {
     width: 200px;
     min-width: 200px;
@@ -8,6 +13,8 @@
     overflow: hidden;
     background: var(--card-bg);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+    animation:fadeIn 0.3s ease forwards;
 }
 
 .Poster1{
@@ -16,17 +23,14 @@
     object-fit: cover;
 }
 
-.card-body {
-    padding: 8px;
-}
-
 .Title{
     font-size: 13px;
     margin: 0 0 8px 0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: var(--text-color);
+    color: #ffffff;
+    font-weight: 600;
 }
 
 .Description{
@@ -40,7 +44,7 @@
 
 .rating{
     text-align: center;
-    color: var(--text-color);
+    color: #ffffff;
 }
 
 .genre-stack {
@@ -99,4 +103,13 @@
 .card-container.selected {
     outline: 2px solid #e50914;
     transform: scale(1.03);
+}
+
+.poster-overlay{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 16px 8px 8px;
+    background: linear-gradient(to top, rgba(0,0,0,0.9),transparent);
 }
