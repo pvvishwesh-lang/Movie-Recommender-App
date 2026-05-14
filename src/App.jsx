@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import SearchComponent from './SearchBar'
 import { useState , useEffect } from 'react';
 import './App.css'
+import { Badge } from 'react-bootstrap';
 export default function App(){
   const [query,setQuery] = useState("")
   const [movie, setMovie] =useState([])
@@ -11,6 +12,7 @@ export default function App(){
   const [isSearched, setSearched]=useState(false)
   const [error, setError] = useState(null)
   const [isDark, setDark] = useState(true)
+  const [selectedMovie, setSelectedMovie] = useState(null)
 
   useEffect(()=>{
    const setTheme=async()=>{ 
@@ -74,10 +76,30 @@ export default function App(){
         genres: genre ? m.genre_ids.map(id=>genre[id]).filter(Boolean):m.genre_ids,
         description: m.overview,
         rating: m.vote_average.toFixed(1)
-      }} />
+      }} 
+        isSelected={selectedMovie?.title===m.title}
+        onSelect={(movie)=> 
+        selectedMovie?.title===movie.title ? setSelectedMovie(null) : setSelectedMovie(movie)
+        } />
       ))}
     </div>
     }
+    {selectedMovie && (
+    <div className='detail-panel'>
+      <button className='close-btn' onClick={() => setSelectedMovie(null)}>✕</button>
+      <img className='detail-poster' src={selectedMovie.image} alt={selectedMovie.title} />
+      <div className='detail-info'>
+        <h2 className='detail-title'>{selectedMovie.title}</h2>
+        <div className='detail-genres'>
+          {selectedMovie.genres.map((genre, index) => (
+            <Badge key={index} bg='danger' className='genre-badge'>{genre}</Badge>
+          ))}
+        </div>
+        <p className='detail-description'>{selectedMovie.description}</p>
+        <p className='detail-rating'> Rating: {selectedMovie.rating}/10</p>
+      </div>
+    </div>
+)}
     <div className='ai-section'>
       <h2 className='ai-title'>AI Recommendations</h2>
       <p className='ai-placeholder'>Search for a movie to get AI-powered recommendations</p>
