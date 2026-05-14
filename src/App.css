@@ -30,4 +30,23 @@ body.light-mode {
   letter-spacing: -1.68px;
   margin: 32px 0;
   color: var(--text-color);
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.theme-toggle{
+  background: none;
+  border: none;
+  border-radius: 50%;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--text-color);
+  margin-left: auto;
+}
+
+.header {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  width: 100% !important;
 }

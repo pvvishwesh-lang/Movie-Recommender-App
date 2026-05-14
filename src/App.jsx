@@ -57,8 +57,10 @@ export default function App(){
   }
   return (
     <div className={isDark ? 'dark' : 'light'} style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
-    <h1 className='WebPageTitle'>Movie Recommender</h1>
-    <button onClick={() => setDark(!isDark)}>Toggle Theme</button>
+    <div className='header'>
+      <h1 className='WebPageTitle'>Movie Recommender</h1>
+      <button className='theme-toggle' onClick={() => setDark(!isDark)}>{isDark ? '☀️' : '🌙'}</button>
+    </div>
     <SearchComponent onSearch={handleSearch} />
     {isSearched && isLoading && <p>Searching...</p>}
     {!isSearched && !isLoading && <p>Search for a movie above</p>}
