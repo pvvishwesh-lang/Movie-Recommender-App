@@ -6,14 +6,14 @@ export default function Body({ movie_details }){
         <div className='card-container'>
             <img className='Poster1' src={ movie_details.image } alt="Poster"></img>
             <div className='card-body'>
-                <h1 className='Title'><b><i>{ movie_details.title }</i></b></h1>
+                <h1 className='Title'>{ movie_details.title }</h1>
                 <Stack className='genre-stack' direction='horizontal' gap={2}>
                     {movie_details.genres.map((genre, index)=>(
-                        <Badge key={index}  bg='light' text='dark'>{genre}</Badge>
+                        <Badge className='genre-badge' key={index}  bg='danger'>{genre}</Badge>
                     ))}
                 </Stack>
                 <p className='Description'>{ movie_details.description }</p>
-                <p className='rating'>Rating: { movie_details.rating.toFixed(1) }</p>
+                <p className='rating'>Rating: { movie_details.rating }/10</p>
             </div>
         </div>
          

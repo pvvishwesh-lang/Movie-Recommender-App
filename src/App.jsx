@@ -61,6 +61,7 @@ export default function App(){
       <h1 className='WebPageTitle'>Movie Recommender</h1>
       <button className='theme-toggle' onClick={() => setDark(!isDark)}>{isDark ? '☀️' : '🌙'}</button>
     </div>
+    <p className='tagline'>Discover your next favorite film</p>
     <SearchComponent onSearch={handleSearch} />
     {isSearched && isLoading && <p className='Searching'>Searching...</p>}
     {!isSearched && !isLoading && <p className='SearchForMovie'>Search for a movie above</p>}
@@ -72,11 +73,15 @@ export default function App(){
         image: `https://image.tmdb.org/t/p/w500${m.poster_path}`,
         genres: genre ? m.genre_ids.map(id=>genre[id]).filter(Boolean):m.genre_ids,
         description: m.overview,
-        rating: m.vote_average 
+        rating: m.vote_average.toFixed(1)
       }} />
       ))}
     </div>
-    } 
+    }
+    <div className='ai-section'>
+      <h2 className='ai-title'>AI Recommendations</h2>
+      <p className='ai-placeholder'>Search for a movie to get AI-powered recommendations</p>
+    </div> 
     {isSearched && !isLoading && movie.length==0 && <p className='NoResults'>No results found for {query}</p>}
     {error && <p className='ErrorMessage'>Something went wrong. Please try again.</p>}
     </div>
