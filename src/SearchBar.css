@@ -3,4 +3,21 @@
     justify-content: center;
     margin-top: 20px;
     width: 100%;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    color: var(--text-color);
+}
+
+.Searchinput{
+    background: var(--input-bg);
+    color: var(--text-color);
+    padding:10px 16px;
+}
+
+.SearchButton{
+    background: var(--input-bg);
+    color: var(--text-color);
+    padding:10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
 }

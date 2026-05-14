@@ -2,7 +2,7 @@ import Body from './MovieCard'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import SearchComponent from './SearchBar'
 import { useState , useEffect } from 'react';
-
+import './App.css'
 export default function App(){
   const [query,setQuery] = useState("")
   const [movie, setMovie] =useState([])
@@ -10,10 +10,19 @@ export default function App(){
   const [isLoading,setIsLoading]=useState(false)
   const [isSearched, setSearched]=useState(false)
   const [error, setError] = useState(null)
+  const [isDark, setDark] = useState(true)
+
+  useEffect(()=>{
+   const setTheme=async()=>{ 
+    console.log('isDark:', isDark)
+    document.body.classList[isDark ? 'remove' : 'add']('light-mode')
+  };
+  setTheme();
+  },[isDark]);
+
   useEffect(()=>{
     const fetchData=async()=>{
       try{
-        
         const response=await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${import.meta.env.VITE_API_KEY}`);
         const result=await response.json();
         const genreMap={}
@@ -47,7 +56,9 @@ export default function App(){
     }
   }
   return (
-    <>
+    <div className={isDark ? 'dark' : 'light'} style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
+    <h1 className='WebPageTitle'>Movie Recommender</h1>
+    <button onClick={() => setDark(!isDark)}>Toggle Theme</button>
     <SearchComponent onSearch={handleSearch} />
     {isSearched && isLoading && <p>Searching...</p>}
     {!isSearched && !isLoading && <p>Search for a movie above</p>}
@@ -66,6 +77,6 @@ export default function App(){
     } 
     {isSearched && !isLoading && movie.length==0 && <p>No results found for {query}</p>}
     {error && <p>Something went wrong. Please try again.</p>}
-    </>
+    </div>
   )
 }

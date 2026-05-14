@@ -3,10 +3,10 @@
     min-width: 250px;
     display: flex;
     flex-direction: column;
-    border: 1px solid #ddd;
+    border: 1px solid var(--card-border);
     border-radius: 8px;
     overflow: hidden;
-    background: white;
+    background: var(--card-bg);
 }
 
 .Poster1{
@@ -25,7 +25,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: black;
+    color: var(--text-color);
 }
 
 .Description{
@@ -34,8 +34,11 @@
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    color: var(--text-color);
 }
 
 .rating{
     text-align: center;
+    color: var(--text-color);
 }
+
