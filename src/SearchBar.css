@@ -6,18 +6,26 @@
     background: var(--card-bg);
     border: 1px solid var(--card-border);
     color: var(--text-color);
+    margin: 0 auto;
+    max-width: 600px;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 .Searchinput{
     background: var(--input-bg);
     color: var(--text-color);
     padding:10px 16px;
+    flex: 1;
+    border: none;
+    outline: none;
 }
 
 .SearchButton{
-    background: var(--input-bg);
     color: var(--text-color);
     padding:10px 20px;
     border-radius: 6px;
     cursor: pointer;
+    background-color: #e50914;
+    border: none;
 }

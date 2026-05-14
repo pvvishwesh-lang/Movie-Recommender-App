@@ -7,6 +7,7 @@
     border-radius: 8px;
     overflow: hidden;
     background: var(--card-bg);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .Poster1{
@@ -42,3 +43,12 @@
     color: var(--text-color);
 }
 
+.genre-stack {
+    flex-wrap: wrap;
+}
+
+.card-container:hover {
+    transform: scale(1.03);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}

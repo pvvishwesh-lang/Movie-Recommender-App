@@ -50,3 +50,24 @@ body.light-mode {
   align-items: center !important;
   width: 100% !important;
 }
+
+
+.results{
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  padding: 16px;
+  margin-top: 24px;
+}
+
+
+.Searching, .SearchForMovie, .NoResults, .ErrorMessage {
+  text-align: center;
+  font-size: 18px;
+  padding: 40px 20px;
+  color: var(--text-color);
+}
+
+.ErrorMessage{
+  color: red !important; 
+}

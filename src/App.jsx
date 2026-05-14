@@ -56,16 +56,16 @@ export default function App(){
     }
   }
   return (
-    <div className={isDark ? 'dark' : 'light'} style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
+    <div className={isDark ? 'dark' : 'light'} style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px', width: '100%' }}>
     <div className='header'>
       <h1 className='WebPageTitle'>Movie Recommender</h1>
       <button className='theme-toggle' onClick={() => setDark(!isDark)}>{isDark ? '☀️' : '🌙'}</button>
     </div>
     <SearchComponent onSearch={handleSearch} />
-    {isSearched && isLoading && <p>Searching...</p>}
-    {!isSearched && !isLoading && <p>Search for a movie above</p>}
+    {isSearched && isLoading && <p className='Searching'>Searching...</p>}
+    {!isSearched && !isLoading && <p className='SearchForMovie'>Search for a movie above</p>}
     {isSearched && !isLoading && movie.length > 0 &&
-    <div style={{ display: 'flex', overflowX: 'auto', gap: '16px', padding: '16px' }}>
+    <div className='results'>
       {movie.map((m,index)=>(
       <Body key={index} movie_details={{
         title: m.title,
@@ -77,8 +77,8 @@ export default function App(){
       ))}
     </div>
     } 
-    {isSearched && !isLoading && movie.length==0 && <p>No results found for {query}</p>}
-    {error && <p>Something went wrong. Please try again.</p>}
+    {isSearched && !isLoading && movie.length==0 && <p className='NoResults'>No results found for {query}</p>}
+    {error && <p className='ErrorMessage'>Something went wrong. Please try again.</p>}
     </div>
   )
 }
