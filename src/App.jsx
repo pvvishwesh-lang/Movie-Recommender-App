@@ -1,9 +1,10 @@
 import Body from './MovieCard'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import SearchComponent from './SearchBar'
-import { useState , useEffect } from 'react';
+import { useState , useEffect, useRef } from 'react';
 import './App.css'
 import { Badge } from 'react-bootstrap';
+import SkeletonBody from './SkeletonCard';
 export default function App(){
   const [query,setQuery] = useState("")
   const [movie, setMovie] =useState([])
@@ -13,10 +14,15 @@ export default function App(){
   const [error, setError] = useState(null)
   const [isDark, setDark] = useState(true)
   const [selectedMovie, setSelectedMovie] = useState(null)
+  const detailRef = useRef(null)
+  useEffect(()=>{
+    if (selectedMovie && detailRef.current){
+      detailRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  },[selectedMovie])
 
   useEffect(()=>{
    const setTheme=async()=>{ 
-    console.log('isDark:', isDark)
     document.body.classList[isDark ? 'remove' : 'add']('light-mode')
   };
   setTheme();
@@ -58,34 +64,42 @@ export default function App(){
     }
   }
   return (
-    <div className={isDark ? 'dark' : 'light'} style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px', width: '100%' }}>
+    <div className={isDark ? 'dark' : 'light'}>
     <div className='header'>
       <h1 className='WebPageTitle'>Movie Recommender</h1>
       <button className='theme-toggle' onClick={() => setDark(!isDark)}>{isDark ? '☀️' : '🌙'}</button>
     </div>
     <p className='tagline'>Discover your next favorite film</p>
     <SearchComponent onSearch={handleSearch} />
-    {isSearched && isLoading && <p className='Searching'>Searching...</p>}
+    {isLoading && (
+      <div className='results'>
+        {[...Array(5)].map((_, index) => (
+            <SkeletonBody key={index} />
+        ))}
+      </div>
+    )}
     {!isSearched && !isLoading && <p className='SearchForMovie'>Search for a movie above</p>}
     {isSearched && !isLoading && movie.length > 0 &&
-    <div className='results'>
-      {movie.map((m,index)=>(
-      <Body key={index} movie_details={{
-        title: m.title,
-        image: `https://image.tmdb.org/t/p/w500${m.poster_path}`,
-        genres: genre ? m.genre_ids.map(id=>genre[id]).filter(Boolean):m.genre_ids,
-        description: m.overview,
-        rating: m.vote_average.toFixed(1)
-      }} 
-        isSelected={selectedMovie?.title===m.title}
-        onSelect={(movie)=> 
-        selectedMovie?.title===movie.title ? setSelectedMovie(null) : setSelectedMovie(movie)
-        } />
-      ))}
+    <div className='results-wrapper'>
+      <div className='results'>
+        {movie.map((m,index)=>(
+        <Body key={index} index={index} movie_details={{
+          title: m.title,
+          image: `https://image.tmdb.org/t/p/w500${m.poster_path}`,
+          genres: genre ? m.genre_ids.map(id=>genre[id]).filter(Boolean):m.genre_ids,
+          description: m.overview,
+          rating: m.vote_average.toFixed(1)
+        }} 
+          isSelected={selectedMovie?.title===m.title}
+          onSelect={(movie)=> 
+          selectedMovie?.title===movie.title ? setSelectedMovie(null) : setSelectedMovie(movie)
+          } />
+        ))}
+      </div>
     </div>
     }
     {selectedMovie && (
-    <div className='detail-panel'>
+    <div className='detail-panel' ref={detailRef}>
       <button className='close-btn' onClick={() => setSelectedMovie(null)}>✕</button>
       <img className='detail-poster' src={selectedMovie.image} alt={selectedMovie.title} />
       <div className='detail-info'>

@@ -1,9 +1,7 @@
-import { Badge } from 'react-bootstrap';
-import { Stack } from 'react-bootstrap';
 import './Moviecard.css'
-export default function Body({ movie_details, onSelect, isSelected }){
+export default function Body({ movie_details, onSelect, isSelected, index}){
     return(
-        <div className={`card-container ${isSelected ? 'selected' : ''}`} onClick={() => onSelect(movie_details)}>
+        <div className={`card-container ${isSelected ? 'selected' : ''}`} style={{animationDelay:`${index*0.1}s`}} onClick={() => onSelect(movie_details)}>
             <div className='poster-wrapper'>
                 <img className='Poster1' src={ movie_details.image } alt="Poster"></img>
                 <div className='poster-overlay'>

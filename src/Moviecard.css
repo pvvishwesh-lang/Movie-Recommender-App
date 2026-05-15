@@ -24,13 +24,14 @@
 }
 
 .Title{
-    font-size: 13px;
+    font-size: 14px;
     margin: 0 0 8px 0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     color: #ffffff;
     font-weight: 600;
+    letter-spacing: 0.3px;
 }
 
 .Description{
@@ -45,6 +46,8 @@
 .rating{
     text-align: center;
     color: #ffffff;
+    font-size: 13px;
+    opacity: 0.8;
 }
 
 .genre-stack {
@@ -81,25 +84,6 @@
     height: 300px;
 }
 
-
-.hover-overlay{
-    position: absolute;
-    top: 0;
-    left:0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.8);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    padding: 8px;
-    overflow-y: auto;
-}
-
-.card-container:hover .hover-overlay{
-    opacity: 1;
-}
-
-
 .card-container.selected {
     outline: 2px solid #e50914;
     transform: scale(1.03);
@@ -111,5 +95,5 @@
     left: 0;
     width: 100%;
     padding: 16px 8px 8px;
-    background: linear-gradient(to top, rgba(0,0,0,0.9),transparent);
+    background: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.7) 50%, transparent 100%);
 }
