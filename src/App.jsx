@@ -14,7 +14,11 @@ export default function App(){
   const [error, setError] = useState(null)
   const [isDark, setDark] = useState(true)
   const [selectedMovie, setSelectedMovie] = useState(null)
+  const [topMovies,setTopMovies]=useState([])
   const detailRef = useRef(null)
+  const [aiPrompt,setAiPrompt]=useState("")
+  const [aiLoading,setAiLoading]=useState(false)
+  const [aiResults,setAiResults]=useState([])
   useEffect(()=>{
     if (selectedMovie && detailRef.current){
       detailRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -28,14 +32,32 @@ export default function App(){
   setTheme();
   },[isDark]);
 
+  const aiHandle=async()=>{
+    try{
+      setAiLoading(true)
+      const response=await fetch(`http://localhost:8000/recommend`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:aiPrompt,movie:selectedMovie?.title || null})})
+      const data=await response.json()
+      setAiResults(data.recommendations)
+    }
+    catch(error){
+      console.error('AI recommendation error:', error)
+    }
+    finally{
+      setAiLoading(false)
+    }
+  }
+
   useEffect(()=>{
     const fetchData=async()=>{
       try{
-        const response=await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${import.meta.env.VITE_API_KEY}`);
-        const result=await response.json();
+        const genreResponse=await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${import.meta.env.VITE_API_KEY}`);
+        const topResponse=await fetch(`https://api.themoviedb.org/3/movie/top_rated?api_key=${import.meta.env.VITE_API_KEY}`);
+        const genreResult=await genreResponse.json();
+        const topResult=await topResponse.json();
         const genreMap={}
-        result.genres.forEach(g=>genreMap[g.id]=g.name)
+        genreResult.genres.forEach(g=>genreMap[g.id]=g.name)
         setGenre(genreMap)
+        setTopMovies(topResult.results)
       }
       catch (error){
         console.error('Couldnt get the genre data due to the following error: ',error);
@@ -66,6 +88,7 @@ export default function App(){
   return (
     <div className={isDark ? 'dark' : 'light'}>
     <div className='header'>
+      <div></div>
       <h1 className='WebPageTitle'>Movie Recommender</h1>
       <button className='theme-toggle' onClick={() => setDark(!isDark)}>{isDark ? '☀️' : '🌙'}</button>
     </div>
@@ -78,7 +101,26 @@ export default function App(){
         ))}
       </div>
     )}
-    {!isSearched && !isLoading && <p className='SearchForMovie'>Search for a movie above</p>}
+    {!isSearched && !isLoading && 
+    <div className='top-movies'> 
+      <h2 className='top-title'>Top Rated Movies</h2>
+      <div className='results'>
+        {topMovies.slice(0,10).map((m,index)=>(
+        <Body key={index} index={index} movie_details={{
+          title: m.title,
+          image: `https://image.tmdb.org/t/p/w500${m.poster_path}`,
+          genres: genre ? m.genre_ids.map(id=>genre[id]).filter(Boolean):m.genre_ids,
+          description: m.overview,
+          rating: m.vote_average.toFixed(1)
+        }} 
+          isSelected={selectedMovie?.title===m.title}
+          onSelect={(movie)=> 
+          selectedMovie?.title===movie.title ? setSelectedMovie(null) : setSelectedMovie(movie)
+          } />
+        ))}
+      </div>
+    </div>
+    }
     {isSearched && !isLoading && movie.length > 0 &&
     <div className='results-wrapper'>
       <div className='results'>
@@ -116,7 +158,12 @@ export default function App(){
 )}
     <div className='ai-section'>
       <h2 className='ai-title'>AI Recommendations</h2>
-      <p className='ai-placeholder'>Search for a movie to get AI-powered recommendations</p>
+      <div className='AiPromptBar'>
+        <input className='AiPrompt' placeholder='Enter your prompt here.' value={aiPrompt} onChange={(e) => setAiPrompt(e.target.value)} onKeyDown={(e) => {if (e.key === 'Enter' && aiPrompt.trim()) {aiHandle(aiPrompt)};}}/>
+        <button className='AiSearchButton' onClick={()=> {if (aiPrompt.trim()) {aiHandle(aiPrompt)}}}>Recommend</button>
+      </div>
+      {aiLoading && <p className='Searching'>Getting recommendations...</p>}
+      {aiResults.length > 0 && (<div className='ai-results'> {aiResults.map((result,index)=>(<p key={index}>{result}</p>))}</div>) }
     </div> 
     {isSearched && !isLoading && movie.length==0 && <p className='NoResults'>No results found for {query}</p>}
     {error && <p className='ErrorMessage'>Something went wrong. Please try again.</p>}

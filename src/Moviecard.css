@@ -24,14 +24,13 @@
 }
 
 .Title{
-    font-size: 14px;
-    margin: 0 0 8px 0;
+    color: var(--text-color);
+    font-size: 13px;
+    font-weight: 600;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: #ffffff;
-    font-weight: 600;
-    letter-spacing: 0.3px;
+    margin: 0 0 4px 0;
 }
 
 .Description{
@@ -44,10 +43,11 @@
 }
 
 .rating{
-    text-align: center;
-    color: #ffffff;
-    font-size: 13px;
-    opacity: 0.8;
+    color: var(--text-color);
+    font-size: 12px;
+    opacity: 0.7;
+    margin: 0;
+    text-align: left;
 }
 
 .genre-stack {
@@ -90,10 +90,6 @@
 }
 
 .poster-overlay{
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    padding: 16px 8px 8px;
-    background: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.7) 50%, transparent 100%);
+    padding: 8px;
+    background: var(--card-bg);
 }
