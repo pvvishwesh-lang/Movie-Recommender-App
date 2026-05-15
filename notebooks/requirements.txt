@@ -1,0 +1,4 @@
+pinecone
+pinecone-client
+sentence-transformers
+requests
