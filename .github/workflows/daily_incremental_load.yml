@@ -19,5 +19,5 @@ jobs:
                   env:
                       VITE_API_KEY: ${{ secrets.VITE_API_KEY }}
                       QDRANT_API_KEY: ${{ secrets.QDRANT_API_KEY }}
-                      QDRANT_URL: ${{ secrets.CLUSTER_ENDPOINT }}
+                      CLUSTER_ENDPOINT: ${{ secrets.CLUSTER_ENDPOINT }}
                   run: python pipeline/incr_load.py
