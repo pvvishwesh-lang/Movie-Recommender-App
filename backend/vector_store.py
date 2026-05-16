@@ -4,6 +4,8 @@ import os
 
 CLUSTER_ENDPOINT=os.environ.get('CLUSTER_ENDPOINT')
 QDRANT_API_KEY=os.environ.get('QDRANT_API_KEY')
+
+
 client=QdrantClient(url=CLUSTER_ENDPOINT,api_key=QDRANT_API_KEY)
 
 def search_movies(embedding,limit=10):
