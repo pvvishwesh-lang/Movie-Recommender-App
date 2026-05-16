@@ -1,0 +1,11 @@
+fastapi
+langgraph 
+langchain-community 
+duckduckgo-search 
+python-dotenv
+qdrant-client
+sentence-transformers
+groq
+uvicorn
+langchain-groq
+pydantic
