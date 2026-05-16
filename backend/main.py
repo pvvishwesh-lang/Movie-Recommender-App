@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
@@ -31,3 +32,7 @@ def health_check():
 def recommend(request:RecommendationRequest)->RecommendResponse:
     result=agent_app.invoke({"prompt": request.prompt,"movie": request.movie,"embedding": [],"candidates":[],"search_results":None,"recommendations":[]})
     return RecommendResponse(recommendations=result["recommendations"])
+
+if __name__=="__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", 10000)))
