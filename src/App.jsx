@@ -171,7 +171,7 @@ export default function App(){
         <button className='AiSearchButton' onClick={()=> {console.log('button clicked', aiPrompt); if (aiPrompt.trim()) {aiHandle(aiPrompt)}}}>Recommend</button>
       </div>
       {aiLoading && <p className='Searching'>Getting recommendations...</p>}
-      {aiResults.length > 0 && (<div className='ai-results'> {aiResults.map((result,index)=>(<p key={index}>{result}</p>))}</div>) }
+      {aiResults.length > 0 && (<div className='ai-results'> {aiResults.map((result,index)=>(<div key={index}><p>{result.title}</p><p>{result.reason}</p></div>))}</div>) }
     </div> 
     {isSearched && !isLoading && movie.length==0 && <p className='NoResults'>No results found for {query}</p>}
     {error && <p className='ErrorMessage'>Something went wrong. Please try again.</p>}
