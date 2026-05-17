@@ -25,7 +25,7 @@ jobs:
           CLUSTER_ENDPOINT: ${{ secrets.CLUSTER_ENDPOINT }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: python -m pytest backend/tests/ -v
+        run: python -m pytest tests/ -v
   deploy:
       needs: test
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
