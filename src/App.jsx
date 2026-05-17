@@ -19,6 +19,7 @@ export default function App(){
   const [aiPrompt,setAiPrompt]=useState("")
   const [aiLoading,setAiLoading]=useState(false)
   const [aiResults,setAiResults]=useState([])
+  
   useEffect(()=>{
     if (selectedMovie && detailRef.current){
       detailRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
