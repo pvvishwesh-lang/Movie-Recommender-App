@@ -55,6 +55,17 @@ def generate_recommendations(state: AgentState) -> AgentState:
     return {'recommendations':result}
     
 
+def fetch_poster(title):
+    import requests
+    try:
+        response=requests.get("https://api.themoviedb.org/3/search/movie",params={"api_key": os.environ.get("VITE_API_KEY"), "query": title}, timeout=5)
+        results = response.json().get("results", [])
+        if results and results[0].get("poster_path"):
+            return results[0]["poster_path"]
+        return ""
+    except:
+        return ""
+
 def format_response(state: AgentState) -> AgentState:
     recommendations=state.get('recommendations',[])
     cleaned=[]
@@ -64,7 +75,7 @@ def format_response(state: AgentState) -> AgentState:
             genres=genres.split(" ")
         elif isinstance(genres, list):
             genres=[g["name"] if isinstance(g, dict) else str(g) for g in genres]
-        cleaned.append({"title": rec.get("title", ""),"overview": rec.get("overview", ""),"rating": float(rec.get("rating", 0)),"poster_path": rec.get("poster_path") or "","genres": genres,"release_date": rec.get("release_date", ""),"reason": rec.get("reason", "")})
+        cleaned.append({"title": rec.get("title", ""),"overview": rec.get("overview", ""),"rating": float(rec.get("rating", 0)),"poster_path": fetch_poster(rec.get("title", "")),"genres": genres,"release_date": rec.get("release_date", ""),"reason": rec.get("reason", "")})
     return {'recommendations':cleaned}
 graph.add_node("embed_prompt", embed_prompt)
 graph.add_node("query_sources", query_sources)
