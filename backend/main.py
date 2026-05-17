@@ -2,7 +2,6 @@ import os
 from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
-from agent import app as agent_app
 
 
 class Recommendations(BaseModel):
@@ -30,6 +29,7 @@ def health_check():
 
 @app.post("/recommend")
 def recommend(request:RecommendationRequest)->RecommendResponse:
+    from agent import app as agent_app
     result=agent_app.invoke({"prompt": request.prompt,"movie": request.movie,"embedding": [],"candidates":[],"search_results":None,"recommendations":[]})
     return RecommendResponse(recommendations=result["recommendations"])
 
