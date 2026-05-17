@@ -51,7 +51,6 @@ def generate_recommendations(state: AgentState) -> AgentState:
     chain=prompt|llm|parser
     result=chain.invoke({'input':input_text})
     return {'recommendations':result}
-    
 
 def fetch_poster_and_rating(title):
     import requests
