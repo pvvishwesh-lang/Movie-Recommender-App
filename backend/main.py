@@ -18,7 +18,6 @@ class RecommendationRequest(BaseModel):
     prompt:str
     movie:str | None=None
 
-
 app=FastAPI(title="Movie Recommender API",description="API for recommending movies based on user preferences and a specified movie.")
 
 app.add_middleware(CORSMiddleware,allow_origins=["*"],allow_methods=["*"],allow_headers=["*"])
