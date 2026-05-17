@@ -8,3 +8,5 @@ groq
 uvicorn
 langchain-groq
 pydantic
+pytest
+httpx
