@@ -9,7 +9,6 @@ from langchain_core.output_parsers import JsonOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 import json
 
-
 GROQ_API_KEY=os.environ.get('GROQ_API_KEY')
 
 class AgentState(TypedDict):
