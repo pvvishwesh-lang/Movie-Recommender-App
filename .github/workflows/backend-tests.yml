@@ -32,9 +32,11 @@ jobs:
             RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
             RENDER_SERVICE_NAME: "Movie-Recommender-App-1"
         - name: Deploy to Render
-          uses: JorgeLNJunior/render-deploy@v1.4.5
+          uses: bounceapp/render-action@0.6.0
           with:
-            service_id: ${{ secrets.RENDER_SERVICE_ID }}
-            api_key: ${{ secrets.RENDER_API_KEY }}
-            wait_deploy: true
-            clear_cache: false
+            render-token: ${{ secrets.RENDER_API_KEY }}
+            github-token: ${{ secrets.GITHUB_TOKEN }}
+            service-id: ${{ secrets.RENDER_SERVICE_ID }}
+            retries: 20
+            wait: 30000
+            sleep: 30000
