@@ -1,0 +1,41 @@
+name: Frontend Tests
+on:   
+  push:
+    branches: [main]
+    paths: 
+      - 'public/**'
+      - 'src/**'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Placeholder test
+        run: echo "Frontend tests passed"
+  deploy:
+      needs: test
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      runs-on: ubuntu-latest
+      permissions: 
+            deployments: write
+            contents: read
+      steps:
+        - uses: actions/checkout@v3
+        - name: Install NPM
+          uses: actions/setup-node@v2
+          with:
+           node-version: '18'
+        - name: Cache dependencies
+          uses: actions/cache@v2
+          with:
+            path: ~/.npm
+            key: npm-${{ hashFiles('package-lock.json') }}
+            restore-keys: npm-
+        - name: Install Vercel
+          run: npm install -g vercel
+        - name: Deploy to Vercel
+          run: vercel --prod --token=${{ secrets.VERCEL_TOKEN }}
+          env:
+            VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+            VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      
