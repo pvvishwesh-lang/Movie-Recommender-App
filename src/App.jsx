@@ -39,7 +39,6 @@ export default function App(){
       setAiLoading(true)
       const response=await fetch(`https://movie-recommender-app-1-js71.onrender.com/recommend`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:aiPrompt,movie:selectedMovie?.title || null})})
       const data=await response.json()
-      console.log('AI results:', data.recommendations)
       if (data.recommendations)
       {
       setAiResults(data.recommendations)
