@@ -171,7 +171,24 @@ export default function App(){
         <button className='AiSearchButton' onClick={()=> {console.log('button clicked', aiPrompt); if (aiPrompt.trim()) {aiHandle(aiPrompt)}}}>Recommend</button>
       </div>
       {aiLoading && <p className='Searching'>Getting recommendations...</p>}
-      {aiResults.length > 0 && (<div className='ai-results'> {aiResults.map((result,index)=>(<div key={index}><p>{result.title}</p><p>{result.reason}</p></div>))}</div>) }
+      {aiResults.length > 0 && 
+      (
+      <div className='results-wrapper'> 
+        <div className='results'>
+        {aiResults.map((result,index)=>(
+          <div key={index} className='ai-result-card'>
+            <img src={result.poster_path ? `https://image.tmdb.org/t/p/w500${result.poster_path}` : ''} alt={result.title} className='ai-result-poster'/>
+            <div className='ai-result-info'>
+              <p className='ai-result-title'>{result.title}</p>
+              <p className='ai-result-genres'>{result.genres.join(', ')}</p>
+              <p className='ai-result-reason'>{result.reason}</p>
+              <p className='ai-result-rating'>Rating: {result.rating}/10</p>
+            </div>
+          </div>
+          ))}
+        </div>
+      </div>
+      )}
     </div> 
     {isSearched && !isLoading && movie.length==0 && <p className='NoResults'>No results found for {query}</p>}
     {error && <p className='ErrorMessage'>Something went wrong. Please try again.</p>}
