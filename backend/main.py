@@ -1,7 +1,9 @@
 import os
-from fastapi import FastAPI
+from fastapi import FastAPI,HTTPException
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
+from contextlib import asynccontextmanager
+import asyncio
 
 
 class Recommendations(BaseModel):
@@ -19,7 +21,13 @@ class RecommendationRequest(BaseModel):
     prompt:str
     movie:str | None=None
 
-app=FastAPI()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    from embedder import get_model
+    get_model()
+    yield
+app=FastAPI(lifespan=lifespan)
 
 app.add_middleware(CORSMiddleware,allow_origins=["*"],allow_methods=["*"],allow_headers=["*"])
 
@@ -29,10 +37,12 @@ def health_check():
 
 @app.post("/recommend")
 def recommend(request:RecommendationRequest)->RecommendResponse:
-    from agent import app as agent_app
-    result=agent_app.invoke({"prompt": request.prompt,"movie": request.movie,"embedding": [],"candidates":[],"search_results":None,"recommendations":[]})
-    return RecommendResponse(recommendations=result["recommendations"])
-
+    try:
+        from agent import app as agent_app
+        result=agent_app.invoke({"prompt": request.prompt,"movie": request.movie,"embedding": [],"candidates":[],"search_results":None,"recommendations":[]})
+        return RecommendResponse(recommendations=result["recommendations"])
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 if __name__=="__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", 10000)))
