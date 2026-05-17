@@ -18,6 +18,7 @@ jobs:
         working-directory: backend
         run: pip install -r requirements.txt
       - name: Run Tests
+        working-directory: backend
         env:
           VITE_API_KEY: ${{ secrets.VITE_API_KEY }}
           QDRANT_API_KEY: ${{ secrets.QDRANT_API_KEY }}
