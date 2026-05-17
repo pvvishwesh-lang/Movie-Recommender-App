@@ -2,8 +2,6 @@ import os
 from fastapi import FastAPI,HTTPException
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
-from contextlib import asynccontextmanager
-import asyncio
 
 
 class Recommendations(BaseModel):
@@ -22,14 +20,7 @@ class RecommendationRequest(BaseModel):
     movie:str | None=None
 
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    import asyncio
-    from embedder import get_model
-    loop=asyncio.get_event_loop()
-    loop.run_in_executor(None, lambda: __import__('embedder').get_model())
-    yield
-app=FastAPI(lifespan=lifespan)
+app=FastAPI(title="Movie Recommender API",description="API for recommending movies based on user preferences and a specified movie.")
 
 app.add_middleware(CORSMiddleware,allow_origins=["*"],allow_methods=["*"],allow_headers=["*"])
 

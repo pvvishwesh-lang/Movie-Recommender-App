@@ -1,12 +1,9 @@
-from sentence_transformers import SentenceTransformer
+import requests
+import os
 
-model = None
-def get_model():
-    global model
-    if model is None:
-        model = SentenceTransformer('all-MiniLM-L6-v2')
-    return model
+HF_TOKEN = os.environ.get("HF_TOKEN")
+
 
 def generate_embedding(input_text):
-    model = get_model()
-    return model.encode(input_text, show_progress_bar=False)
+    response = requests.post("https://api-inference.huggingface.co/models/sentence-transformers/all-MiniLM-L6-v2", headers={"Authorization": f"Bearer {HF_TOKEN}"},json={"inputs": input_text})
+    return response.json()
