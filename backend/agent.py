@@ -42,7 +42,7 @@ def query_sources(state: AgentState) -> AgentState:
 def generate_recommendations(state: AgentState) -> AgentState:
     llm=ChatGroq(model="llama-3.1-8b-instant",api_key=GROQ_API_KEY,temperature=0.7)
     parser=JsonOutputParser(pydantic_object={"type": "object","properties": {'title':{'type':'string'},'overview':{'type':'string'},'rating':{'type':'float'},'poster_path':{'type':'string'},'genres':{'type':'string'},'release_date':{'type':'string'},'reason':{'type':'string'}}})
-    prompt=ChatPromptTemplate.from_messages([("system","""You are a movie recommendation expert. Given a user's request and a list of candidate movies, pick 5 different movies that match the request. DO NOT recommend the same movie the user mentioned, its sequels, prequels, or documentaries about it. Only recommend movies with ratings above 6.5. Focus on narrative feature films only, no short films or experimental films. Explain in one sentence why each movie matches. Return a JSON array of exactly 5 objects with fields: title, overview, rating, poster_path, genres, release_date, reason. Return ONLY the JSON array, no other text."""),("user", "{input}")])
+    prompt=ChatPromptTemplate.from_messages([("system","""You are a movie recommendation expert. Given a user's request and a list of candidate movies, pick 5 different movies that match the request. You MUST return exactly 5 movies, no more no less. DO NOT recommend the same movie the user mentioned, its sequels, prequels, or documentaries about it. Only recommend movies with ratings above 6.5. Focus on narrative feature films only, no short films or experimental films. Explain in one sentence why each movie matches. Return a JSON array of exactly 5 objects with fields: title, overview, rating, poster_path, genres, release_date, reason. Return ONLY the JSON array, no other text."""),("user", "{input}")])
     candidates=state.get('candidates')
     search_results=state.get('search_results')
     if candidates:
@@ -55,16 +55,19 @@ def generate_recommendations(state: AgentState) -> AgentState:
     return {'recommendations':result}
     
 
-def fetch_poster(title):
+def fetch_poster_and_rating(title):
     import requests
     try:
         response=requests.get("https://api.themoviedb.org/3/search/movie",params={"api_key": os.environ.get("VITE_API_KEY"), "query": title}, timeout=5)
         results = response.json().get("results", [])
-        if results and results[0].get("poster_path"):
-            return results[0]["poster_path"]
-        return ""
+        if results:
+            return {
+                "poster_path": results[0].get("poster_path", ""),
+                "rating": results[0].get("vote_average", 0)
+            }
+        return {"poster_path": "", "rating": 0}
     except:
-        return ""
+        return {"poster_path": "", "rating": 0}
 
 def format_response(state: AgentState) -> AgentState:
     recommendations=state.get('recommendations',[])
@@ -75,7 +78,11 @@ def format_response(state: AgentState) -> AgentState:
             genres=genres.split(" ")
         elif isinstance(genres, list):
             genres=[g["name"] if isinstance(g, dict) else str(g) for g in genres]
-        cleaned.append({"title": rec.get("title", ""),"overview": rec.get("overview", ""),"rating": float(rec.get("rating", 0)),"poster_path": fetch_poster(rec.get("title", "")),"genres": genres,"release_date": rec.get("release_date", ""),"reason": rec.get("reason", "")})
+        tmdb_data=fetch_poster_and_rating(rec.get("title", ""))
+        rating=rec.get("rating", 0)
+        if not rating or rating == 0:
+            rating=tmdb_data.get("rating",0)
+        cleaned.append({"title": rec.get("title", ""),"overview": rec.get("overview", ""),"rating": float(rating),"poster_path": tmdb_data.get("poster_path", ""),"genres": genres,"release_date": rec.get("release_date", ""),"reason": rec.get("reason", "")})
     return {'recommendations':cleaned}
 graph.add_node("embed_prompt", embed_prompt)
 graph.add_node("query_sources", query_sources)
