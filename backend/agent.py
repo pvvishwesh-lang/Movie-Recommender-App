@@ -20,7 +20,6 @@ class AgentState(TypedDict):
     recommendations: list
 graph = StateGraph(AgentState)
 
-
 def embed_prompt(state: AgentState) -> AgentState:
     userPrompt=state['prompt']
     userMovie=state['movie']
