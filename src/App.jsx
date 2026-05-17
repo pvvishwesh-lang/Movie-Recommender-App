@@ -33,6 +33,7 @@ export default function App(){
   },[isDark]);
 
   const aiHandle=async()=>{
+    console.log('aiHandle called', aiPrompt)
     try{
       setAiLoading(true)
       const response=await fetch(`https://movie-recommender-app-7qz4.onrender.com/recommend`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:aiPrompt,movie:selectedMovie?.title || null})})
@@ -160,7 +161,7 @@ export default function App(){
       <h2 className='ai-title'>AI Recommendations</h2>
       <div className='AiPromptBar'>
         <input className='AiPrompt' placeholder='Enter your prompt here.' value={aiPrompt} onChange={(e) => setAiPrompt(e.target.value)} onKeyDown={(e) => {if (e.key === 'Enter' && aiPrompt.trim()) {aiHandle(aiPrompt)};}}/>
-        <button className='AiSearchButton' onClick={()=> {if (aiPrompt.trim()) {aiHandle(aiPrompt)}}}>Recommend</button>
+        <button className='AiSearchButton' onClick={()=> {console.log('button clicked', aiPrompt); if (aiPrompt.trim()) {aiHandle(aiPrompt)}}}>Recommend</button>
       </div>
       {aiLoading && <p className='Searching'>Getting recommendations...</p>}
       {aiResults.length > 0 && (<div className='ai-results'> {aiResults.map((result,index)=>(<p key={index}>{result}</p>))}</div>) }
