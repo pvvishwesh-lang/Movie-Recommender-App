@@ -11,6 +11,7 @@ import json
 
 GROQ_API_KEY=os.environ.get('GROQ_API_KEY')
 
+
 class AgentState(TypedDict):
     prompt: str
     movie: str | None
