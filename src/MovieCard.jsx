@@ -9,7 +9,6 @@ export default function Body({ movie_details, onSelect, isSelected, index}){
                     <p className='Title'>{ movie_details.title }</p>
                     <p className='rating'>{ movie_details.rating }/10</p>
             </div>
-        </div>
-         
+        </div>     
     )
 }
