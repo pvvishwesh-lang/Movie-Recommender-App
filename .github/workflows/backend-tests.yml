@@ -16,7 +16,11 @@ jobs:
           python-version: '3.11'
       - name: Install Dependencies
         working-directory: backend
-        run: pip install -r requirements.txt
+        run: |
+          pip install -r requirements.txt
+          pip show pytest
+          which python
+          which pip
       - name: Run Tests
         working-directory: backend
         env:
