@@ -35,7 +35,7 @@ export default function App(){
   const aiHandle=async()=>{
     try{
       setAiLoading(true)
-      const response=await fetch(`https://movie-recommender-app-7qz4.onrender.com/recommend`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:aiPrompt,movie:selectedMovie?.title || null})})
+      const response=await fetch(`https://movie-recommender-app-1-js71.onrender.com`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:aiPrompt,movie:selectedMovie?.title || null})})
       const data=await response.json()
       console.log('AI results:', data.recommendations)
       if (data.recommendations)
