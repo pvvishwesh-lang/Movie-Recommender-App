@@ -5,6 +5,7 @@ import { useState , useEffect, useRef } from 'react';
 import './App.css'
 import { Badge } from 'react-bootstrap';
 import SkeletonBody from './SkeletonCard';
+import { Analytics } from '@vercel/analytics/react';
 export default function App(){
   const [query,setQuery] = useState("")
   const [movie, setMovie] =useState([])
@@ -193,6 +194,7 @@ export default function App(){
     </div> 
     {isSearched && !isLoading && movie.length==0 && <p className='NoResults'>No results found for {query}</p>}
     {error && <p className='ErrorMessage'>Something went wrong. Please try again.</p>}
+    <Analytics />
     </div>
   )
 }
