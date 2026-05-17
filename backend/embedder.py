@@ -11,3 +11,4 @@ def generate_embedding(input_text):
     if isinstance(result, list) and isinstance(result[0], list):
         return result[0]
     return result
+    
