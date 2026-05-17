@@ -10,8 +10,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Placeholder test
-        run: echo "Backend tests passed"
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install Dependencies
+        run: pip install -r backend/requirements.txt
+      - name: Run Tests
+        env:
+          VITE_API_KEY: ${{ secrets.VITE_API_KEY }}
+          QDRANT_API_KEY: ${{ secrets.QDRANT_API_KEY }}
+          CLUSTER_ENDPOINT: ${{ secrets.CLUSTER_ENDPOINT }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: pytest backend/tests/ -v
   deploy:
       needs: test
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
