@@ -22,7 +22,7 @@ jobs:
           which python
           which pip
       - name: Run Tests
-        working-directory: backend
+        working-directory: tests
         env:
           VITE_API_KEY: ${{ secrets.VITE_API_KEY }}
           QDRANT_API_KEY: ${{ secrets.QDRANT_API_KEY }}
