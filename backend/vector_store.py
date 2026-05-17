@@ -4,6 +4,7 @@ import os
 
 CLUSTER_ENDPOINT=os.environ.get('CLUSTER_ENDPOINT')
 QDRANT_API_KEY=os.environ.get('QDRANT_API_KEY')
+
 client = None
 
 def get_client():
