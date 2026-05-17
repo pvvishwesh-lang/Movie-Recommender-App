@@ -32,16 +32,17 @@ def embed_prompt(state: AgentState) -> AgentState:
 def query_sources(state: AgentState) -> AgentState:
     embedding=state["embedding"]
     candidates=search_movies(embedding)
-    if not candidates or candidates[0]['score'] < 0.3:
+    filtered=[c for c in candidates if c.get('rating', 0) >= 6.5]
+    if not filtered or filtered[0]['score'] < 0.3:
         search=DuckDuckGoSearchRun()
         search_results=search.run(f"movie recommendations {state['prompt']}")
         return {'search_results':search_results}
-    return {'candidates':candidates}
+    return {'candidates':filtered}
 
 def generate_recommendations(state: AgentState) -> AgentState:
     llm=ChatGroq(model="llama-3.1-8b-instant",api_key=GROQ_API_KEY,temperature=0.7)
     parser=JsonOutputParser(pydantic_object={"type": "object","properties": {'title':{'type':'string'},'overview':{'type':'string'},'rating':{'type':'float'},'poster_path':{'type':'string'},'genres':{'type':'string'},'release_date':{'type':'string'},'reason':{'type':'string'}}})
-    prompt=ChatPromptTemplate.from_messages([("system","""You are a movie recommendation expert.Given a user's request and a list of candidate movies, pick the 5 best matches and explain why each one matches.Return a JSON array of objects with fields: title, overview, rating, poster_path, genres, release_date, reason.Return ONLY the JSON array, no other text."""),("user", "{input}")])
+    prompt=ChatPromptTemplate.from_messages([("system","""You are a movie recommendation expert.Given a user's request and a list of candidate movies, pick the best matches with ratings above 6.5 out of 10, which is not a documentary of the movie itself, which is not a short film or an experimental film, focuses on narrative feature, and explain why each one matches.Return a JSON array of objects with fields: title, overview, rating, poster_path, genres, release_date, reason.Return ONLY the JSON array, no other text."""),("user", "{input}")])
     candidates=state.get('candidates')
     search_results=state.get('search_results')
     if candidates:
