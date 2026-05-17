@@ -24,8 +24,10 @@ class RecommendationRequest(BaseModel):
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    import asyncio
     from embedder import get_model
-    get_model()
+    loop=asyncio.get_event_loop()
+    loop.run_in_executor(None, lambda: __import__('embedder').get_model())
     yield
 app=FastAPI(lifespan=lifespan)
 
