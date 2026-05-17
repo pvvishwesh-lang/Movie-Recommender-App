@@ -3,7 +3,6 @@ from fastapi import FastAPI,HTTPException
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 
-
 class Recommendations(BaseModel):
     title:str
     overview:str
