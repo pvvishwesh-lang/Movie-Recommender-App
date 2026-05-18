@@ -9,7 +9,6 @@ export default function SkeletonBody(){
                     <div className='skeleton-rating'></div>
                 </div>
             </div>
-        </div>
-         
+        </div>   
     )
 }
