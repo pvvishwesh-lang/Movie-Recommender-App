@@ -9,8 +9,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Placeholder test
-        run: echo "Frontend tests passed"
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+            path: ~/.npm
+            key: npm-${{ hashFiles('package-lock.json') }}
+            restore-keys: npm-
+      - name: Install Dependencies
+        run: npm install
+      - name: Run Tests
+        run: npm test
   deploy:
       needs: test
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
