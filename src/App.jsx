@@ -180,6 +180,13 @@ export default function App(){
         <button className='AiSearchButton' onClick={()=> {if (aiPrompt.trim()) {aiHandle(aiPrompt)}}}>Recommend</button>
       </div>
       {aiLoading && <p className='Searching'>Getting recommendations...</p>}
+      {aiLoading && (
+      <div className='results'>
+        {[...Array(5)].map((_, index) => (
+            <SkeletonBody key={index} />
+        ))}
+      </div>
+    )}
       {aiResults.length > 0 && 
       (
       <div className='results-wrapper'> 
