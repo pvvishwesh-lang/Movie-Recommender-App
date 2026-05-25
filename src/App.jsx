@@ -172,7 +172,7 @@ export default function App(){
         <p className='detail-rating'> {selectedMovie.rating}/10</p>
       </div>
     </div>
-)}
+    )}
     <div className='ai-section'>
       <h2 className='ai-title'>AI Recommendations</h2>
       <div className='AiPromptBar'>
@@ -187,7 +187,8 @@ export default function App(){
         ))}
       </div>
     )}
-      {aiResults.length > 0 && 
+    
+    {aiResults.length > 0 && 
       (
       <div className='results-wrapper'> 
         <div className='results'>
