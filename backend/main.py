@@ -19,6 +19,7 @@ class RecommendationRequest(BaseModel):
     movie:str | None=None
 
 app=FastAPI(title="Movie Recommender API",description="API for recommending movies based on user preferences and a specified movie.")
+
 app.add_middleware(CORSMiddleware,allow_origins=["*"],allow_methods=["*"],allow_headers=["*"])
 
 @app.get('/')
@@ -33,6 +34,7 @@ def recommend(request:RecommendationRequest)->RecommendResponse:
         return RecommendResponse(recommendations=result["recommendations"])
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
 if __name__=="__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", 10000)))
