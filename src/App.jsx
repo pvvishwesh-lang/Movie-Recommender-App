@@ -193,6 +193,9 @@ export default function App(){
     </div> 
     {isSearched && !isLoading && movie.length==0 && <p className='NoResults'>No results found for {query}</p>}
     {error && <p className='ErrorMessage'>Something went wrong. Please try again.</p>}
+    <footer className='footer'>Made by Vishwesh</footer>
+    <a href="https://github.com/pvvishwesh-lang/Movie-Recommender-App" target="_blank" rel="noopener noreferrer"><i className="fab fa-github footer-icon" style={{fontSize: '24px', color: 'red'}}></i></a>
+    <p className='copyright'>© {new Date().getFullYear()} Movie Recommender. All rights reserved.</p>
     <Analytics />
     </div>
   )
