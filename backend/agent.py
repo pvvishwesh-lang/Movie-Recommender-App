@@ -18,6 +18,7 @@ class AgentState(TypedDict):
     candidates: list
     search_results: str | None
     recommendations: list
+    
 graph = StateGraph(AgentState)
 
 def embed_prompt(state: AgentState) -> AgentState:
