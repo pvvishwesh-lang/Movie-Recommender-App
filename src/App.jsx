@@ -17,16 +17,24 @@ export default function App(){
   const [selectedMovie, setSelectedMovie] = useState(null)
   const [topMovies,setTopMovies]=useState([])
   const detailRef = useRef(null)
+  const aiResultsRef = useRef(null)
   const [aiPrompt,setAiPrompt]=useState("")
   const [aiLoading,setAiLoading]=useState(false)
   const [aiResults,setAiResults]=useState([])
+  const [aiSelectedMovie,setaiSelectedMovie] = useState(null)
   
   useEffect(()=>{
     if (selectedMovie && detailRef.current){
       detailRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
   },[selectedMovie])
-
+  
+  useEffect(()=>{
+    if (aiSelectedMovie && aiResultsRef.current){
+      aiResultsRef.current.scrollIntoView({behavior: 'smooth', block:'start'})
+    }
+  },[aiSelectedMovie])
+  
   useEffect(()=>{
    const setTheme=async()=>{ 
     document.body.classList[isDark ? 'remove' : 'add']('light-mode')
@@ -177,19 +185,39 @@ export default function App(){
       <div className='results-wrapper'> 
         <div className='results'>
         {aiResults.map((result,index)=>(
-          <div key={index} className='ai-result-card'>
-            <img src={result.poster_path ? `https://image.tmdb.org/t/p/w500${result.poster_path}` : ''} alt={result.title} className='ai-result-poster'/>
-            <div className='ai-result-info'>
-              <p className='ai-result-title'>{result.title}</p>
-              <p className='ai-result-genres'>{result.genres.join(', ')}</p>
-              <p className='ai-result-reason'>{result.reason}</p>
-              <p className='ai-result-rating'>Rating: {result.rating}/10</p>
-            </div>
-          </div>
+          <Body key={index} index={index} movie_details={{
+            title:result.title,
+            image: `https://image.tmdb.org/t/p/w500${result.poster_path}`,
+            rating: result.rating,
+            genres: result.genres,
+            overview: result.overview,
+            reason: result.reason
+          }}
+          isSelected={aiSelectedMovie?.title === result.title}
+          onSelect={(movie) => 
+          aiSelectedMovie?.title === movie.title ? setaiSelectedMovie(null) : setaiSelectedMovie(movie)
+          }/>
           ))}
         </div>
       </div>
       )}
+    {aiSelectedMovie && (
+    <div className='ai-detail-panel' ref={aiResultsRef}>
+      <button className='close-btn' onClick={() => setaiSelectedMovie(null)}>✕</button>
+      <img className='detail-poster' src={aiSelectedMovie.image} alt={aiSelectedMovie.title} />
+      <div className='detail-info'>
+        <h2 className='detail-title'>{aiSelectedMovie.title}</h2>
+        <div className='detail-genres'>
+          {aiSelectedMovie.genres.map((genre, index) => (
+            <Badge key={index} bg='danger' className='genre-badge'>{genre}</Badge>
+          ))}
+        </div>
+        <p className='detail-description'>Description: {aiSelectedMovie.overview}</p>
+        <p className='detail-description'> AI Reasoning: {aiSelectedMovie.reason}</p>
+        <p className='detail-rating'> {aiSelectedMovie.rating}/10</p>
+      </div>
+    </div>
+    )}
     </div> 
     {isSearched && !isLoading && movie.length==0 && <p className='NoResults'>No results found for {query}</p>}
     {error && <p className='ErrorMessage'>Something went wrong. Please try again.</p>}
