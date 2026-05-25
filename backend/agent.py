@@ -18,7 +18,7 @@ class AgentState(TypedDict):
     candidates: list
     search_results: str | None
     recommendations: list
-    
+
 graph = StateGraph(AgentState)
 
 def embed_prompt(state: AgentState) -> AgentState:
@@ -82,6 +82,7 @@ def format_response(state: AgentState) -> AgentState:
             rating=tmdb_data.get("rating",0)
         cleaned.append({"title": rec.get("title", ""),"overview": rec.get("overview", ""),"rating": float(rating),"poster_path": tmdb_data.get("poster_path", ""),"genres": genres,"release_date": rec.get("release_date", ""),"reason": rec.get("reason", "")})
     return {'recommendations':cleaned}
+
 graph.add_node("embed_prompt", embed_prompt)
 graph.add_node("query_sources", query_sources)
 graph.add_node("generate_recommendations", generate_recommendations)
