@@ -9,8 +9,9 @@ def test_embed_prompt():
     assert isinstance(result['embedding'], list)    
 
 def test_query_sources():
-    state={'embedding': [0.1, 0.2, 0.3]}
-    result=query_sources(state)
+    embedding=generate_embedding("sci-fi movies")
+    state = {'prompt': 'sci-fi movies', 'embedding': embedding}
+    result = query_sources(state)
     assert 'candidates' in result or 'search_results' in result
 
 def test_generate_recommendations():
